@@ -9,15 +9,18 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
     
-    var itemArray = ["Find Pen", "Stusy sumthin", "buy milk"]
+    var itemArray = [Item]()
+    
+    let defaults = UserDefaults.standard
+    let datafilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        for family in UIFont.familyNames.sorted() {
-            let names = UIFont.fontNames(forFamilyName: family)
-            print("Family: \(family) Font names: \(names)")
-        }
+        
+        print(datafilePath)
+        
+      
+        loadItem()
     }
     
     //-MARK: - TableViewDatasource Method
@@ -27,8 +30,13 @@ class TodoListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
-        cell.textLabel?.text = itemArray[indexPath.row]
+        let item = itemArray[indexPath.row]
+        cell.textLabel?.text = item.title
+        
+        cell.accessoryType = item.done == true ? .checkmark : .none
+
         
         return cell
     }
@@ -36,16 +44,14 @@ class TodoListViewController: UITableViewController {
     //MARK: - TableView Deeklegate method
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        }else{
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
+         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
+        saveItem()
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    
 //MARK: - Add item
     
     @IBAction func addButton(_ sender: UIBarButtonItem) {
@@ -54,8 +60,12 @@ class TodoListViewController: UITableViewController {
         
         let alert = UIAlertController(title: "Add Item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            self.itemArray.append(textField.text!)
-            self.tableView.reloadData()
+            
+            let newItem = Item()
+            newItem.title = textField.text!
+            self.itemArray.append(newItem)
+            
+            self.saveItem()
         }
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create new Item"
@@ -66,6 +76,27 @@ class TodoListViewController: UITableViewController {
         
         present(alert, animated: true, completion: nil)
         
+    }
+    func saveItem(){
+        let encoder = PropertyListEncoder()
+        do{
+            let data = try encoder.encode(itemArray)
+            try data.write(to: datafilePath!)
+        }catch{
+            print("error\(error)")
+        }
+        self.tableView.reloadData()
+    }
+    
+    func loadItem(){
+        if let data = try? Data(contentsOf: datafilePath!){
+            let decoder = PropertyListDecoder()
+            do{
+            itemArray = try decoder.decode([Item].self, from: data)
+            }catch{
+                print("Error\(error)")
+            }
+        }
     }
 }
 

@@ -41,6 +41,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1278F68B2748B018000B808F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				1281EBF02747BD2100A8953F /* TodoListViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		1278F68C2748B025000B808F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1281EBF22747BD2100A8953F /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1278F68F2748B048000B808F /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				1281EBF52747BD2100A8953F /* TodoList.xcdatamodeld */,
+			);
+			path = "Data Model";
+			sourceTree = "<group>";
+		};
 		1281EBE02747BD2100A8953F = {
 			isa = PBXGroup;
 			children = (
@@ -63,12 +87,12 @@
 				1281EC052747C55F00A8953F /* Fonts */,
 				1281EBEC2747BD2100A8953F /* AppDelegate.swift */,
 				1281EBEE2747BD2100A8953F /* SceneDelegate.swift */,
-				1281EBF02747BD2100A8953F /* TodoListViewController.swift */,
-				1281EBF22747BD2100A8953F /* Main.storyboard */,
+				1278F68F2748B048000B808F /* Data Model */,
+				1278F68B2748B018000B808F /* Controller */,
+				1278F68C2748B025000B808F /* View */,
 				1281EBF82747BD2A00A8953F /* Assets.xcassets */,
 				1281EBFA2747BD2A00A8953F /* LaunchScreen.storyboard */,
 				1281EBFD2747BD2A00A8953F /* Info.plist */,
-				1281EBF52747BD2100A8953F /* TodoList.xcdatamodeld */,
 			);
 			path = TodoList;
 			sourceTree = "<group>";
